@@ -12,19 +12,19 @@ namespace ApiCategory.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BaseController<R,M> : ControllerBase where R:BaseRepository<M> where M:BaseModel
+	public class BaseController<R, M> : ControllerBase where R : BaseRepository<M> where M : BaseModel
 	{
 		R repository = Activator.CreateInstance<R>();
 		[HttpGet]
-		public void Get()
+		public List<M> Get()
 		{
-			repository.Read();
+			return repository.Read();
 		}
 		// GET api/<CategoryController>/5
 		[HttpGet("{id}")]
-		public void Get(int id)
+		public M Get(int id)
 		{
-			repository.Read(id);
+			return repository.Read(id);
 		}
 
 		// POST api/<CategoryController>
