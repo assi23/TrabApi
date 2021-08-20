@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Data.Models;
+using Data.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +12,40 @@ namespace ApiCategory.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CategoryController : ControllerBase
+	public class BaseController<R,M> : ControllerBase where R:BaseRepository<M> where M:BaseModel
 	{
-		// GET: api/<CategoryController>
+		R repository = Activator.CreateInstance<R>();
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public void Get()
 		{
-			return new string[] { "value1", "value2" };
+			repository.Read();
 		}
-
 		// GET api/<CategoryController>/5
 		[HttpGet("{id}")]
-		public string Get(int id)
+		public void Get(int id)
 		{
-			return "value";
+			repository.Read(id);
 		}
 
 		// POST api/<CategoryController>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		public void Post([FromBody] M value)
 		{
+			repository.Create(value);
 		}
 
 		// PUT api/<CategoryController>/5
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		public void Put(int id, [FromBody] M model)
 		{
+			repository.Update(model);
 		}
 
 		// DELETE api/<CategoryController>/5
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
+			repository.Delete(id);
 		}
 	}
 }
